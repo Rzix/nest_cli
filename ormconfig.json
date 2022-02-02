@@ -1,0 +1,17 @@
+{
+    "type":"postgres",
+    "host":"localhost",
+    "username": "postgres", 
+    "port":5432,
+    "password": "reza2019",
+    "database":"nestjs",
+    "extra":{
+        "trustServerCertificate":true
+    },
+    "entites":["dist/**/*.entity.js"],
+    "migration":["dist/migration/*.js"],
+    "cli":{
+        "migrationDir":"src/migration"
+    }
+  
+}

@@ -1,0 +1,1 @@
+export const CURRENCY_SING :string='CURRENCY_SING'

@@ -1,9 +1,12 @@
 
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { query } from 'express';
+import { EventTypes } from 'src/event/entities/event.entity';
+import { PaginatedDto } from './dto/pagination.dto';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { PostService } from './post.service';
+
 @Controller('Post')
 export class PostController {
     constructor(private readonly postService:PostService){}
@@ -13,7 +16,7 @@ export class PostController {
     //      res.status(HttpStatus.GONE).send('That all')
     // }
     findAll(){
-        return this.postService.findAll
+        return this.postService.findAll()
    }
 
     @Get('/:id')
@@ -26,13 +29,13 @@ export class PostController {
     }
 
     @Put(':id')
-    update(@Param('id')id , @Body()body:UpdatePostDto){
-        return  this.postService.update(+id,body)
-    }
-    
-    @Patch('/:id')
-    patch(@Param('id')id, @Body()body:UpdatePostDto){
-        return this.postService.update(+id,body)
+  update(@Param('id') id, @Body() body: UpdatePostDto) {
+    return this.postService.update(+id, body);
+  }
+    @Patch(':id')
+    patch(@Param('id') id, @Body() body: UpdatePostDto) {
+      console.log(body instanceof UpdatePostDto);
+      return this.postService.update(+id, body);
     }
 
     @Delete(':id')
@@ -41,13 +44,18 @@ export class PostController {
     }
 
     @Get('/paginated')
-    findAll_Paginated(@Query()query){
-        return`All Post ,paginated,page${query.page},count: ${query.count}`
+    findAllPaginated(@Query() query: PaginatedDto) {
+        return this.postService.findAll(query);
       }
     // @Post('/')
     // insert(@Body()body){
     //     return`insert new Post ${body.name}`
     // }
+
+    @Patch(':id/event/:type/:userId')
+    like(@Param('id') id,@Param('userId') userId, @Param() type:EventTypes) {
+       return this.postService.event(+id,type,userId)
+    }
     
 }
 
